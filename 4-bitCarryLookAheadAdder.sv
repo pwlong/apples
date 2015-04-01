@@ -19,6 +19,7 @@ module CarryLookAheadAdder4Bit (
 	genvar ii;
 	
 	generate
+		// lookahead logic
 		assign carry[0] = c_in;
 		assign carry[1] = g[0] | 
 						  c_in & p[0];
@@ -35,6 +36,7 @@ module CarryLookAheadAdder4Bit (
 						  g[0] & p[1] & p[2] & p[3] | 
 						  c_in & p[0] & p[1] & p[2] & p[3];
 		
+		// adder logic
 		for (ii = 0; ii < 4; ii = ii + 1) begin
 			assign g[ii] = a[ii] & b[ii];
 			assign p[ii] = a[ii] | b[ii];
