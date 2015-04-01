@@ -1,4 +1,4 @@
-`timescale 1ns\1ps
+`timescale 1ns/1ps
 /*!************************************************************************************************
 *
 *	@file		nBitAdder_TB.sv
@@ -35,7 +35,7 @@ module nBitAdderTestBench ();
 	initial begin
 		for (i=0; i < 16; i=i+1) begin
 			for (j=0; j < 16; j=j+1) begin
-				for (k=0, k==1, k=k+1) begin
+				for (k=0; k==1; k=k+1) begin
 					#100 a = i;
 						 b = j;
 						 c_in = k;
@@ -43,7 +43,7 @@ module nBitAdderTestBench ();
 					#300 if ((a + b) != {c_out,s}) begin
 							errors = errors + 1;
 							$display("");
-							$display("  ERROR: %4d + %4d != %5d", a, b, {c_out,s})
+							$display("  ERROR: %4d + %4d != %5d", a, b, {c_out,s});
 				end
 			end
 		end
@@ -51,14 +51,9 @@ module nBitAdderTestBench ();
 		$display("");
 		$display("  Simulation Complete");
 		$display("===================================================");
-		if (0 == errors) begin
-			$display("  Congratulations on an error-free simulation.");
-        end
-		else begin
-             $display("  %4d errors detected", errors);
-        end
-             
-        $display("");
+		if (0 == errors) $display("  Congratulations on an error-free simulation.");
+		else             $display("  %4d errors detected", errors);
+    $display("");
 		$finish();
 	end
-end module
+endmodule
