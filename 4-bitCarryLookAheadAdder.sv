@@ -2,7 +2,7 @@
 
 
 
-module 4BitCarryLookAheadAdder (
+module CarryLookAheadAdder4Bit (
 	input  [3:0] a,
 	input  [3:0] b,
 	input        c_in,
@@ -35,7 +35,7 @@ module 4BitCarryLookAheadAdder (
 						  g[0] & p[1] & p[2] & p[3] | 
 						  c_in & p[0] & p[1] & p[2] & p[3];
 		
-		for (ii = 0; ii < NUM_BITS; ii = ii + 1) begin
+		for (ii = 0; ii < 4; ii = ii + 1) begin
 			assign g[ii] = a[ii] & b[ii];
 			assign p[ii] = a[ii] | b[ii];
 			assign s[ii] = a[ii] ^ b[ii] ^ carry[ii];
