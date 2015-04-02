@@ -52,10 +52,12 @@ module nBitAdder_TB ();
 						 c_in = k;
 					#300 if ((a + b + c_in) != {c_out,s}) begin
 							errors = errors + 1;
-							$fwrite(f, "  ERROR: %2d + %2d + %1d != %2d\n", a, b, c_in, {c_out,s});
+							$fwrite(f, "  ERROR: %2d + %2d + %1d != %2d\n",
+									a, b, c_in, {c_out,s});
 					end
 					else begin
-						$fwrite(f, "  %2d + %2d + %1d = %2d\n", a, b, c_in, {c_out, s});
+						$fwrite(f, "  %2d + %2d + %1d = %2d\n",
+								a, b, c_in, {c_out, s});
 					end
 				end
 			end
@@ -63,8 +65,10 @@ module nBitAdder_TB ();
 		
 		$fwrite(f, "=========================\n");
 		$fwrite(f, "  Simulation Complete\n");
-		if (0 == errors) $fwrite(f, "  Congratulations on an\n  error-free simulation!\n");
-		else             $fwrite(f, "  %4d errors detected\n", errors);
+		if (0 == errors)
+			$fwrite(f, "  Congratulations on an\n  error-free simulation!\n");
+		else
+			$fwrite(f, "  %4d errors detected\n", errors);
 		$fwrite(f, "=========================\n");
 		$fclose(f);
 		$finish();
