@@ -19,12 +19,23 @@ module nBitAdder_TB ();
 	reg		[3:0]	a, b, s;
 	reg			 	c_in, c_out;
 	
-	integer i, j, k;				// loop counters
-	integer f;							// file handle
+	integer i, j, k;			// loop counters
+	integer f;					// file handle
 	integer errors = 0;			// errors counter
 
 	// instantiate the DUT
-	CarryLookAheadAdder4Bit #( /* no parameters*/)
+/*
+	CarryLookAheadAdder4Bit #( /*no parameters*/)
+	adder (
+		.a		(a),
+		.b		(b),
+		.c_in	(c_in),
+		.s		(s),
+		.c_out	(c_out)
+	);
+  */
+  
+  nBitCarryLookAheadAdder #(.NUMBITS(4))
 	adder (
 		.a		(a),
 		.b		(b),
