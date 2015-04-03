@@ -1,87 +1,44 @@
-`timescale 1ns/1ps
-/*!************************************************************************************************
-*
-*	@file		nBitAdder_TB.sv
-*
-*	@author		Paul Long <paul@thelongs.ws>
-*	@date		31 March 2015
-*	@copyright	Paul Long, 2015
-*
-*	@brief		Test bench 4-bit expandable carry lookahead adder
-*
-*
-**************************************************************************************************/
+// use a loop and parameters to connect up the right number of 4 bits
 
 
 
-module nBitAdder_TB ();
+
+
+
+
+module nBitCarryLookAheadAdder (
+  input   [NUMBITS-1:0] a_in, b_in;
+	input					        c_in;
+	output  [NUMBITS-1:0]	s_out;
+	output					      c_out);
 	
-	reg		[3:0]	a, b, s;
-	reg			 	c_in, c_out;
 	
-	integer i, j, k;			// loop counters
-	integer f;					// file handle
-	integer errors = 0;			// errors counter
-
-	// instantiate the DUT
-/*
-	CarryLookAheadAdder4Bit #( /*no parameters*/)
-	adder (
-		.a		(a),
-		.b		(b),
-		.c_in	(c_in),
-		.s		(s),
-		.c_out	(c_out)
-	);
-  */
-  
-  nBitCarryLookAheadAdder #(.NUMBITS(4))
-	adder (
-		.a		(a),
-		.b		(b),
-		.c_in	(c_in),
-		.s		(s),
-		.c_out	(c_out)
-	);
-
-	initial begin
-		// open a logfile
-		f = $fopen("addertest.log","w");
-		$fwrite(f, "  Starting Simulation\n");
-		$fwrite(f, "=========================\n");
-
-		// build the input stimulus and compare to expectations
-		// this small solution space allows for an exhaustive test
-		for (i=0; i < 16; i=i+1) begin
-			//$fwrite(f, "into i loop!\n");
-			for (j=0; j < 16; j=j+1) begin
-				//$fwrite(f, "into j loop\n");
-				for (k=0; k < 2; k=k+1) begin
-					//$fwrite(f, "into k loop");
-					#100 a = i;
-						 b = j;
-						 c_in = k;
-					#300 if ((a + b + c_in) != {c_out,s}) begin
-							errors = errors + 1;
-							$fwrite(f, "  ERROR: %2d + %2d + %1d != %2d\n",
-									a, b, c_in, {c_out,s});
-					end
-					else begin
-						$fwrite(f, "  %2d + %2d + %1d = %2d\n",
-								a, b, c_in, {c_out, s});
-					end
-				end
-			end
-		end
-		
-		$fwrite(f, "=========================\n");
-		$fwrite(f, "  Simulation Complete\n");
-		if (0 == errors)
-			$fwrite(f, "  Congratulations on an\n  error-free simulation!\n");
-		else
-			$fwrite(f, "  %4d errors detected\n", errors);
-		$fwrite(f, "=========================\n");
-		$fclose(f);
-		$finish();
+	parameter  NUMBITS         = 8;						            // input width
+	localparam BASEADDERSIZE   = 4;						            // width of constituent adders
+	localparam BASEADDEROFFSET = BASEADDERSIZE-1;		      // upper index given base adder size
+	localparam BASEADDERNUM    = NUMBITS / BASEADDERSIZE; // number of base adders we need
+                                                        // to hit the desired input width
+	
+	if (NUMBITS % BASEADDERSIZE != 0) begin
+		// stop and scream, this won't work, bucko!
 	end
-endmodule
+	
+	wire  [NUMBITS/BASEADDERSIZE:0] carry;
+	
+	genvar i;		// loop counter
+	
+	generate
+		assign carry[0] = c_in;
+		assign c_out    = carry[BASEADDERNUM]
+		
+		for (i=0; i < NUMBITS/BASEADDERNUM; i = i + 1) begin : adders
+      CarryLookAheadAdder4Bit #(/*no parameters*/)
+      adder (
+				.a		  (a[(i*BASEADDERSIZE)+BASEADDEROFFSET:i*BASEADDERSIZE]),
+				.b		  (b[(i*BASEADDERSIZE)+BASEADDEROFFSET:i*BASEADDERSIZE]),
+				.c_in	  (carry[i]),
+				.s		  (s[(i*BASEADDERSIZE)+BASEADDEROFFSET:i*BASEADDERSIZE]),
+				.c_out  (carry[i+1])			
+			);
+		end
+	endgenerate
