@@ -6,14 +6,15 @@
 
 
 
-module nBitCarryLookAheadAdder (
-  input   [NUMBITS-1:0] a_in, b_in;
+module nBitCarryLookAheadAdder (a_in, b_in, c_in, s_out, c_out);
+  parameter NUMBITS=8;
+
+	// port declerations
+	input   [NUMBITS-1:0] a_in, b_in;
 	input					        c_in;
 	output  [NUMBITS-1:0]	s_out;
-	output					      c_out);
+	output					      c_out;
 	
-	
-	parameter  NUMBITS         = 8;						            // input width
 	localparam BASEADDERSIZE   = 4;						            // width of constituent adders
 	localparam BASEADDEROFFSET = BASEADDERSIZE-1;		      // upper index given base adder size
 	localparam BASEADDERNUM    = NUMBITS / BASEADDERSIZE; // number of base adders we need
@@ -23,13 +24,16 @@ module nBitCarryLookAheadAdder (
 		// stop and scream, this won't work, bucko!
 	end
 	
-	wire  [NUMBITS/BASEADDERSIZE:0] carry;
+
+	// internal connections
+	wire	[BASEADDEROFFSET:0]				a, b, s;							// these need to be the right width
+	wire  [NUMBITS/BASEADDERSIZE:0] carry;								// to connect the constituent adders
 	
 	genvar i;		// loop counter
 	
 	generate
 		assign carry[0] = c_in;
-		assign c_out    = carry[BASEADDERNUM]
+		assign c_out    = carry[BASEADDERNUM];
 		
 		for (i=0; i < NUMBITS/BASEADDERNUM; i = i + 1) begin : adders
       CarryLookAheadAdder4Bit #(/*no parameters*/)
@@ -42,3 +46,4 @@ module nBitCarryLookAheadAdder (
 			);
 		end
 	endgenerate
+endmodule

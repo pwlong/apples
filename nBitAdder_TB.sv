@@ -25,7 +25,7 @@ module nBitAdder_TB ();
 
 	// instantiate the DUT
 /*
-	CarryLookAheadAdder4Bit #( /*no parameters*/)
+	CarryLookAheadAdder4Bit #()
 	adder (
 		.a		(a),
 		.b		(b),
@@ -37,10 +37,10 @@ module nBitAdder_TB ();
   
   nBitCarryLookAheadAdder #(.NUMBITS(4))
 	adder (
-		.a		(a),
-		.b		(b),
-		.c_in	(c_in),
-		.s		(s),
+		.a_in		(a),
+		.b_in		(b),
+		.c_in		(c_in),
+		.s_out	(s),
 		.c_out	(c_out)
 	);
 
