@@ -24,7 +24,7 @@ module nBitAdder_TB ();
 	integer errors = 0;			// errors counter
 
 	// instantiate the DUT
-/*
+	/*
 	CarryLookAheadAdder4Bit #()
 	adder (
 		.a		(a),
@@ -33,9 +33,9 @@ module nBitAdder_TB ();
 		.s		(s),
 		.c_out	(c_out)
 	);
-  */
+	*/
   
-  nBitCarryLookAheadAdder #(.NUMBITS(4))
+  nBitCarryLookAheadAdder #(.NUMBITS(8))
 	adder (
 		.a_in		(a),
 		.b_in		(b),
@@ -43,7 +43,7 @@ module nBitAdder_TB ();
 		.s_out	(s),
 		.c_out	(c_out)
 	);
-
+	
 	initial begin
 		// open a logfile
 		f = $fopen("addertest.log","w");
@@ -53,15 +53,12 @@ module nBitAdder_TB ();
 		// build the input stimulus and compare to expectations
 		// this small solution space allows for an exhaustive test
 		for (i=0; i < 16; i=i+1) begin
-			//$fwrite(f, "into i loop!\n");
 			for (j=0; j < 16; j=j+1) begin
-				//$fwrite(f, "into j loop\n");
 				for (k=0; k < 2; k=k+1) begin
-					//$fwrite(f, "into k loop");
 					#100 a = i;
 						 b = j;
 						 c_in = k;
-					#300 if ((a + b + c_in) != {c_out,s}) begin
+					#300 if ((a + b + c_in) !== {c_out,s}) begin //includes X and Z
 							errors = errors + 1;
 							$fwrite(f, "  ERROR: %2d + %2d + %1d != %2d\n",
 									a, b, c_in, {c_out,s});

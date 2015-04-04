@@ -9,11 +9,11 @@
 module nBitCarryLookAheadAdder (a_in, b_in, c_in, s_out, c_out);
   parameter NUMBITS=8;
 
-	// port declerations
+	// port declarations
 	input   [NUMBITS-1:0] a_in, b_in;
-	input					        c_in;
-	output  [NUMBITS-1:0]	s_out;
-	output					      c_out;
+	input				  c_in;
+	output  [NUMBITS-1:0] s_out;
+	output				  c_out;
 	
 	localparam BASEADDERSIZE   = 4;						            // width of constituent adders
 	localparam BASEADDEROFFSET = BASEADDERSIZE-1;		      // upper index given base adder size
@@ -26,24 +26,25 @@ module nBitCarryLookAheadAdder (a_in, b_in, c_in, s_out, c_out);
 	
 
 	// internal connections
-	wire	[BASEADDEROFFSET:0]				a, b, s;							// these need to be the right width
-	wire  [NUMBITS/BASEADDERSIZE:0] carry;								// to connect the constituent adders
+	wire  [NUMBITS-1:0]		  a, b, s;			  		          //
+	wire  [BASEADDERNUM:0]  carry;  				  	          //
 	
-	genvar i;		// loop counter
+	genvar i;											                        // loop counter
+  generate
 	
-	generate
-		assign carry[0] = c_in;
+    assign carry[0] = c_in;
 		assign c_out    = carry[BASEADDERNUM];
 		
-		for (i=0; i < NUMBITS/BASEADDERNUM; i = i + 1) begin : adders
-      CarryLookAheadAdder4Bit #(/*no parameters*/)
-      adder (
-				.a		  (a[(i*BASEADDERSIZE)+BASEADDEROFFSET:i*BASEADDERSIZE]),
-				.b		  (b[(i*BASEADDERSIZE)+BASEADDEROFFSET:i*BASEADDERSIZE]),
-				.c_in	  (carry[i]),
-				.s		  (s[(i*BASEADDERSIZE)+BASEADDEROFFSET:i*BASEADDERSIZE]),
-				.c_out  (carry[i+1])			
+		for (i=0; i < BASEADDERNUM; i = i + 1) begin : adders
+			CarryLookAheadAdder4Bit #()
+			adder (
+				.a		 (a[(i*BASEADDERSIZE)+BASEADDEROFFSET:i*BASEADDERSIZE]),
+				.b		 (b[(i*BASEADDERSIZE)+BASEADDEROFFSET:i*BASEADDERSIZE]),
+				.c_in	 (carry[i]),
+				.s		 (s[(i*BASEADDERSIZE)+BASEADDEROFFSET:i*BASEADDERSIZE]),
+				.c_out (carry[i+1])
 			);
 		end
 	endgenerate
+ 
 endmodule
