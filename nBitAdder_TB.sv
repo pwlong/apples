@@ -16,61 +16,69 @@
 
 module nBitAdder_TB ();
 	
-  integer numBits;
-  
-  if (!$value$plusargs("NUMBITS=%0d", numBits))
-    numBits = 4;
- 
-  reg		[numBits-1:0]	a, b, s;
+	reg		[3:0]	a, b, s;
 	reg			 	c_in, c_out;
 	
-	integer i, j, k;  			// loop counters
-	integer f;    					// file handle
-	integer errors  = 0;		// errors counter
- 
-	// instantiate appropriate the DUT
-	//	CarryLookAheadAdder4Bit #()
-	//	adder (
-	//		.a		(a),
-	//		.b		(b),
-	//		.c_in	(c_in),
-	//		.s		(s),
-	//		.c_out	(c_out)
-	//	);
-	
-		nBitCarryLookAheadAdder #(.NUMBITS(4))
-		adder (
-			.a_in		(a),
-			.b_in		(b),
-			.c_in		(c_in),
-			.s_out	(s),
-			.c_out	(c_out)
-		);
-	
+	integer i, j, k;		    // loop counters
+	integer f;					    // file handle
+	integer errors = 0;			// errors counter
+  string  testname;       // which test to run
+  integer numbits;        // input width
+
+
+/*
+	CarryLookAheadAdder4Bit #()
+	adder (
+		.a		(a),
+		.b		(b),
+		.c_in	(c_in),
+		.s		(s),
+		.c_out	(c_out)
+	);
+  */
+  
+  nBitCarryLookAheadAdder #(.NUMBITS(4))
+	adder (
+		.a_in		(a),
+		.b_in		(b),
+		.c_in		(c_in),
+		.s_out	(s),
+		.c_out	(c_out)
+	);
+
 	initial begin
-		// open a logfile
-		f = $fopen("addertest.log","w");
-		$fwrite(f, "  Starting Simulation\n");
-		//if ($value$plusargs("TESTNAME=%s", testName)) begin
-		//	$fwrite(f, "  %s\n", testName);
-		//end
-		$fwrite(f, "=========================\n");
+  // open the logfile
+	f = $fopen("addertest.log","w");
+	$fwrite(f, "  Starting Simulation\n");
+	$fwrite(f, "=========================\n");
+  
+  // get any command line +args
+  if ($value$plusargs("TESTNAME=%s", testname)) begin
+    $fwrite("Running test %0s.", testname);
+  end
+  
+    
+  
+		
 
 		// build the input stimulus and compare to expectations
 		// this small solution space allows for an exhaustive test
-		for (i=0; i < 2^numBits; i=i+1) begin
-			for (j=0; j < 2^numBits; j=j+1) begin
+		for (i=0; i < 16; i=i+1) begin
+			//$fwrite(f, "into i loop!\n");
+			for (j=0; j < 16; j=j+1) begin
+				//$fwrite(f, "into j loop\n");
 				for (k=0; k < 2; k=k+1) begin
+					//$fwrite(f, "into k loop");
 					#100 a = i;
 						 b = j;
 						 c_in = k;
-					#300 if ((a + b + c_in) !== {c_out,s}) begin //includes X and Z
+					#300 if ((a + b + c_in) !== {c_out,s}) begin
 							errors = errors + 1;
-							$fwrite(f, "  ERROR: %3d + %3d + %1d != %3d\n",
+							$fwrite(f, "  ERROR: %2d + %2d + %1d != %2d\n",
 									a, b, c_in, {c_out,s});
 					end
 					else begin
-						$fwrite(f, "  %3d + %3d + %1d = %3d\n",
+						$fwrite(f, "  %2d + %2d + %1d = %2d\n",
 								a, b, c_in, {c_out, s});
 					end
 				end
