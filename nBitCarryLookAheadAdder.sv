@@ -23,7 +23,6 @@ module nBitCarryLookAheadAdder #(parameter NUMBITS=8)(
 	
 
 	// internal connections
-	//wire	[BASEADDEROFFSET:0] a, b, s;      				// these need to be the right width
 	wire  [BASEADDERNUM:0]    carry;								// to connect the constituent adders
 	
 	genvar i;		// loop counter
