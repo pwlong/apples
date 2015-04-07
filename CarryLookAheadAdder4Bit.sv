@@ -41,32 +41,28 @@ module CarryLookAheadAdder4Bit (
 	wire  [/*NUM_BITS-1*/3:0] g, p;
 	wire  [/*NUM_BITS-1*/3:0] carry;
 
-	genvar ii;
-	
-	generate
-		// lookahead logic
-		assign #5 carry[0] =  c_in;
-		assign #5 carry[1] =  g[0] | 
-                          c_in & p[0];
-		assign #5 carry[2] =  g[1] | 
-                          g[0] & p[1] | 
-                          c_in & p[0] & p[1];
-		assign #5 carry[3] =  g[2] | 
-                          g[1] & p[2] | 
-                          g[0] & p[1] & p[2] | 
-                          c_in & p[0] & p[1] & p[2];
-		assign #5 c_out    =  g[3] | 
-                          g[2] & p[3] | 
-                          g[1] & p[2] & p[3] | 
-                          g[0] & p[1] & p[2] & p[3] | 
-                          c_in & p[0] & p[1] & p[2] & p[3];
-		
-		// adder logic
-		for (ii = 0; ii < 4; ii = ii + 1) begin
-			assign #5 g[ii] = a[ii] & b[ii];
-			assign #5 p[ii] = a[ii] | b[ii];
-			assign #5 s[ii] = a[ii] ^ b[ii] ^ carry[ii];
-		end
-	endgenerate
+
+	// lookahead logic
+  assign carry[0] = c_in;
+  assign carry[1] = g[0] | 
+                    c_in & p[0];
+  assign carry[2] = g[1] | 
+                    g[0] & p[1] | 
+                    c_in & p[0] & p[1];
+  assign carry[3] = g[2] | 
+                    g[1] & p[2] | 
+                    g[0] & p[1] & p[2] | 
+                    c_in & p[0] & p[1] & p[2];
+  assign c_out    = g[3] | 
+                    g[2] & p[3] | 
+                    g[1] & p[2] & p[3] | 
+                    g[0] & p[1] & p[2] & p[3] | 
+                    c_in & p[0] & p[1] & p[2] & p[3];
+ 
+ // adder logic
+	assign g = a & b;
+	assign p = a | b;
+	assign #5 s = a ^ b ^ carry;
+
 	
 endmodule

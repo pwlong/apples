@@ -19,6 +19,7 @@ module nBitCarryLookAheadAdder #(parameter NUMBITS=8)(
 	
 	if (NUMBITS % BASEADDERSIZE != 0) begin
 		// stop and scream, this won't work, bucko!
+    //$halt();
 	end
 	
 
