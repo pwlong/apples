@@ -7,21 +7,26 @@
 *	@date		    31 March 2015
 *	@copyright	Paul Long, 2015
 *
-*	@brief		  Test bench for 4-bit or n-bit expandable carry-lookahead adder
+*	@brief		  Test bench for 4-bit or n-bit expandable carry-lookahead adder.
 *
-* @parameter  TEST    When = 0, run the 4-bit test
-*                     When = 1, run the n-bit testName
-*                     This may be changed at runtime on the command line
+* @parameter  TEST    When = 0, run the 4-bit test.
+*                     When = 1, run the n-bit testName.
+*                     This may be changed at simtime on the command line.
 *
 * @parameter  NUMBITS Width of the inputs and output
-*                     This may be changed at runtime on the command line
+*                     This may be changed at simtime on the command line
+* @parameter  testName  Name of the generated logfile. Will have ".log" appended to the
+*                       filename. If no name is specified a reasonable default is used.
 *
 **************************************************************************************************/
 
 module nBitAdder_TB ();
+  // default to baseline test unless
+  // overridden on command line
 	parameter TEST     = 0;
   parameter NUMBITS  = 4;
   
+  // module connections
 	reg   [NUMBITS-1:0]	a, b;
   reg 		 	          c_in;
   wire  [NUMBITS-1:0] s_out;
@@ -40,8 +45,8 @@ module nBitAdder_TB ();
   // instantiate modules
   CarryLookAheadAdder4Bit #()
     adder_4Bit (
-      .a		  (a),
-      .b		  (b),
+      .a		  (a[3:0]),
+      .b		  (b[3:0]),
       .c_in	  (c_in),
       .s		  (temp_s[0]),
       .c_out  (temp_c[0])
@@ -66,15 +71,16 @@ module nBitAdder_TB ();
     // otherwise, construct one that make sense
     if (!$value$plusargs("LOGNAME=%s", logName)) begin
       case(TEST)
-        //TODO: think about including the # of bits specified in the n-bit case
-        0:  logName = "4-bit_test";
-        1:  logName = "n-bit_test";
+        0:  logName = "4_bit_test";
+        1:  logName = $psprintf("%0d_bit_test",NUMBITS);
         default: logName = "unspecified_test";
       endcase
     end
+    
     // open the logfile for writing
     f = $fopen($psprintf("%s.log",logName),"w");
     $fwrite(f, "  Starting Simulation\n");
+    $fwrite(f, "=========================\n");
 
     
     // build the input stimulus and compare to expectations
@@ -102,8 +108,8 @@ module nBitAdder_TB ();
     
     $fwrite (f, "=========================\n");
     $fwrite (f, "  Simulation Complete\n");
-    $fwrite (f, "  Ran %d tests\n", testsRun);
-    $fwrite (f, "%d errors detected\n", errors);
+    $fwrite (f, "  ran %0d tests\n", testsRun);
+    $fwrite (f, "  found %0d errors\n", errors);
     $fwrite (f, "=========================\n");
     
     $display(   "\n     =========================");
@@ -116,5 +122,5 @@ module nBitAdder_TB ();
     $fclose(f);
     $stop();
   
-	end // Initial
+	end // initial
 endmodule

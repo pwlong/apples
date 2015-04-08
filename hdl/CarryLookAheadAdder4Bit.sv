@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 /*!************************************************************************************************
 *
-*	@file		    4-bitCarryLookAheadAdder.sv
+*	@file		    CarryLookAheadAdder4Bit.sv
 *
 *	@author		  Paul Long <paul@thelongs.ws>
 *	@date		    31 March 2015

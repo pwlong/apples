@@ -1,10 +1,29 @@
-// use a loop and parameters to connect up the right number of 4 bits
-
-
-
-
-
-
+`timescale 1ns/1ps
+/*!************************************************************************************************
+*
+*	@file		    nbitCarryLookAheadAdder.sv
+*
+*	@author		  Paul Long <paul@thelongs.ws>
+*	@date		    5 April 2015
+*	@copyright  Paul Long, 2015
+*
+*	@brief		  n-bit expandable carry lookahead adder
+*				
+*		  This module implements a n-bit carry lookahead adder using the appropriate number of
+*     4-bit adders (as described in  ECE571 at Portland State University, Spring 2015).
+*     It uses XOR for the addition and constructs generate and propagate signals for the
+*     lookahead logic.  
+*
+*	@input	    a,b   numbers to be added
+*	@input	    c_in  carry in from any previous stages (module is expandable)
+*		  	
+* @output     s     result of the addition
+*	@output	    c_out carry out to the next stage
+*     
+*	@parameter 	NUMBITS Width of the inputs and output
+*                     This may be changed at runtime on the command line
+*  
+**************************************************************************************************/
 
 module nBitCarryLookAheadAdder #(parameter NUMBITS=8)(
 	input   [NUMBITS-1:0] a_in, b_in,
@@ -16,15 +35,22 @@ module nBitCarryLookAheadAdder #(parameter NUMBITS=8)(
 	localparam BASEADDEROFFSET = BASEADDERSIZE-1;		      // upper index given base adder size
 	localparam BASEADDERNUM    = NUMBITS / BASEADDERSIZE; // number of base adders we need
                                                         // to hit the desired input width
-	
-	if (NUMBITS % BASEADDERSIZE != 0) begin
-		// stop and scream, this won't work, bucko!
-    //$halt();
+  initial begin
+    if (NUMBITS % BASEADDERSIZE != 0) begin
+      // stop and scream, this won't work, bucko!
+      $display("\n     =========================");
+      $display("     Invalid NUMBITS specified");
+      $display("       must be multiple of 4");
+      $display("       you gave NUMBITS=%0d", NUMBITS);
+      $display("     =========================\n");
+      $finish();
+    end
 	end
-	
 
 	// internal connections
-	wire  [BASEADDERNUM:0]    carry;								// to connect the constituent adders
+  // carry needs special consideration
+  // inputs and sum are just bit selects
+	wire  [BASEADDERNUM:0]    carry;
 	
 	genvar i;		// loop counter
 	
