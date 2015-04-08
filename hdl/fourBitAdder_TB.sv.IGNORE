@@ -1,0 +1,74 @@
+`timescale 1ns/1ps
+module fourBitAdder_TB ();
+
+  
+	reg   [3:0]	a, b;
+  reg 	      c_in;
+  wire  [3:0] s_out;
+  wire        c_out;
+  
+  // internal signals
+  //wire  [3:0] temp_s[1:0];
+  //wire        temp_c[1:0];
+  
+	integer i, j, k;		    // loop counters
+	integer f;					    // file handle
+	integer errors   = 0;		// errors counter
+  integer testsRun = 0;   // results counter
+  
+  // instantiate modules
+  CarryLookAheadAdder4Bit #()
+    adder_4Bit (
+      .a		  (a),
+      .b		  (b),
+      .c_in	  (c_in),
+      .s		  (s_out),
+      .c_out  (c_out)
+    );  
+    
+
+    
+  initial begin
+    // open the logfile
+    f = $fopen("addertest.log","w");
+    $fwrite(f, "  Starting Simulation\n");
+    $fwrite(f, "=========================\n");
+
+    
+    // build the input stimulus and compare to expectations
+    // this small solution space allows for an exhaustive test
+    for (i=0; i < 16; i=i+1) begin
+      for (j=0; j < 16; j=j+1) begin
+        for (k=0; k < 2; k=k+1) begin
+          testsRun = testsRun + 1;
+          #100  a = i;
+                b = j;
+                c_in = k;
+          // use x and z in the comparison
+          #300 if ((a + b + c_in) !== {c_out,s_out}) begin
+              errors = errors + 1;
+              $fwrite(f, "  ERROR: %d + %d + %d != %d\n",
+                      a, b, c_in, {c_out,s_out});
+          end
+          else begin
+            $fwrite(f, "  %d + %d + %d = %d\n",
+                    a, b, c_in, {c_out, s_out});
+          end
+        end
+      end
+    end
+    
+    $fwrite(f, "=========================\n");
+    $fwrite(f, "  Simulation Complete\n");
+    $display(  "  Simulation Complete");
+    $fwrite(f, "  Ran %d tests\n", testsRun);
+    $display(  "  Ran %d tests", testsRun);
+    $fwrite(f, "      %d errors detected\n", errors);
+    $display(  "      %d errors detected", errors);
+    $fwrite(f, "=========================\n");
+    
+    $fclose(f);
+    $finish();
+  
+	end // Initial
+endmodule
