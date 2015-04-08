@@ -108,8 +108,8 @@ module nBitAdder_TB ();
     
     $display(   "\n     =========================");
     $display(   "       Simulation Complete");
-    $display("     %8d tests", testsRun);
-    $display(   "     %8d errors", errors);
+    $display("     %8d tests  run", testsRun);
+    $display(   "     %8d errors found", errors);
     $display(   "       See logfile:\n         %s.log\n       for more details", logName);
     $display(   "     =========================\n");
     
