@@ -20,8 +20,9 @@
 * @output     s     result of the addition
 *	@output	    c_out carry out to the next stage
 *     
-*	@parameter 	NUMBITS Width of the inputs and output
-*                     This may be changed at runtime on the command line
+*	@parameter 	NUMBITS Width of the inputs and output. Must be a multiple of 4, since the 
+*                     constituent adders are 4-bits wide.
+*                     Parameter may be changed at simtime on the command line
 *  
 **************************************************************************************************/
 

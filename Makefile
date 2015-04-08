@@ -5,7 +5,7 @@ VLOG = \
 	hdl/CarryLookAheadAdder4Bit.sv \
 	hdl/nBitCarryLookAheadAdder.sv
 
-sim:
+sim: $(VLOG)
 	vlib work
 	vlog -source $(VLOG)
 
