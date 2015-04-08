@@ -35,7 +35,6 @@ NOTE: The 8-bit adder specified in the assignment is implemented as an n-bit add
 |-- README.md
 `-- hdl
     |-- CarryLookAheadAdder4Bit.sv
-    |-- fourBitAdder_TB.sv.IGNORE
     |-- nBitAdder_TB.sv
     `-- nBitCarryLookAheadAdder.sv
 
