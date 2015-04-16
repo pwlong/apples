@@ -4,25 +4,17 @@ Paul Long <paul@thelongs.ws>
 7 April 2015
 
 NOTE: The 8-bit adder specified in the assignment is implemented as an n-bit adder
-      with defaults set to produce 8-bits. This satisfies the requirements of the 
+      with defaults set to produce 8 bits. This satisfies the requirements of the 
       assignment while providing more flexibility. For significantly larger bit counts,
       the exhaustive verification employed here will likely become untenable.
 
   1. Unzip the package (you probably did that already if you are reading this).
-  2. To compile and run the simulation and provided tests from the command line (recommended).
-      a. Type "make run".
-         QuestSima should start up and give you the QuestaSim> prompt.
-      b. At QuestaSim> prompt type "do 4bit.do".
-         This will run the exhaustive 4-bit base adder test with the correct parameters
-         already specified for you. Screen will show results summary and give
-         logfile name for more detailed output. See the .do files for example on 
-         parameter specification.
-      c. At QuestaSim> prompt type "do 8bit.do".
-         This will run exhaustive 8-bit test which uses the base adder tested above.
-         As before, the correct parameters will be specified for you and the screen should show
-         a results summary and logfile name.
-      d. To end simulation and peruse the log files or write some glowing feedback for Paul or 
-         just go on about your life at the command line, type "q".
+  2. To compile and run the simulation and provided tests from the command line (recommended),
+     type "make run". QuestSima should start up and run the 8-bit exhaustive test then restart
+		 and run the 4-bit exhaustive test. The tests will run with the correct parameters
+		 specified for each test. See the provided 8bit.do and 4bit.do files for examples
+		 on parameter use. A results summary will be displayed on screen and detailed log files
+		 will be created for each run.
   3. To compile the simulation without starting it up, type "make".
       a. You can then manually start the simulation with any desired parameters.
       b. Once started you can manually run the simulation with any desired parameters.
@@ -39,5 +31,5 @@ NOTE: The 8-bit adder specified in the assignment is implemented as an n-bit add
     |-- nBitAdder_TB.sv             <--- test bench for both Verilog modules
     `-- nBitCarryLookAheadAdder.sv  <--- Verilog source for nBit adder
 
-After running the tests, ./ will also have QuestaSim produced files & work directory
+After running the tests, ./ will also have QuestaSim-produced files & work directory
 as well as the detailed logs produced by the test bench.

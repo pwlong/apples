@@ -54,7 +54,7 @@ module CarryLookAheadAdder4Bit (
                  g[0] & p[1] & p[2] | 
                  c_in & p[0] & p[1] & p[2];
                  
-  assign c_out = g[3] | 
+  assign #5 c_out = g[3] | 
                  g[2] & p[3] | 
                  g[1] & p[2] & p[3] | 
                  g[0] & p[1] & p[2] & p[3] | 
@@ -63,7 +63,7 @@ module CarryLookAheadAdder4Bit (
   // adder logic
   assign g = a & b;
 	assign p = a | b;
-	assign s = a ^ b ^ co;
+	assign #5 s = a ^ b ^ co;
 
 	
 endmodule

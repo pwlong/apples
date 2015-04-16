@@ -120,7 +120,7 @@ module nBitAdder_TB ();
     $display(   "     =========================\n");
     
     $fclose(f);
-    $stop();
+    $finish();
   
 	end // initial
 endmodule

@@ -10,7 +10,8 @@ sim: $(VLOG)
 	vlog -source $(VLOG)
 
 run: sim
-	vsim -c
+	vsim -c -do 8bit.do
+	vsim -c -do 4bit.do
 
 clean: 
 	rm -rf work/ *.log transcript *.zip
